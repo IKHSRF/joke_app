@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:joke_app/models/joke_model.dart';
+import 'package:joke_app/Services/jokeAPI_services.dart';
 import 'package:joke_app/widgets/joke_dialog_content.dart';
 
 class JokePage extends StatefulWidget {
@@ -28,7 +28,7 @@ class _JokePageState extends State<JokePage> {
       body: Container(
         //return snapshot from joke model
         child: FutureBuilder(
-          future: Joke.getRandomTenJoke(),
+          future: JokeFunction.getRandomTenJoke(),
           builder: (BuildContext context, AsyncSnapshot snapshot) {
             //if snapshot do not have data, show circular progress indicator
             if (!snapshot.hasData) {
