@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:joke_app/models/joke_model.dart';
+import 'package:joke_app/widgets/joke_dialog_content.dart';
 
 class JokePage extends StatefulWidget {
   @override
@@ -13,8 +14,9 @@ class _JokePageState extends State<JokePage> {
     return Scaffold(
       backgroundColor: Colors.blue,
       appBar: AppBar(
-        title: Text('aplikasi ini hanyalah joke'),
+        title: Text('Aplikasi ini hanyalah bercandaan'),
         actions: [
+          //button refresh, if button tapped, refresh the joke
           IconButton(
             icon: Icon(Icons.refresh_outlined),
             onPressed: () {
@@ -24,14 +26,17 @@ class _JokePageState extends State<JokePage> {
         ],
       ),
       body: Container(
+        //return snapshot from joke model
         child: FutureBuilder(
           future: Joke.getRandomTenJoke(),
           builder: (BuildContext context, AsyncSnapshot snapshot) {
+            //if snapshot do not have data, show circular progress indicator
             if (!snapshot.hasData) {
               return Center(
                 child: CircularProgressIndicator(),
               );
             }
+            //if snapshot have data, show list of joke
             return Container(
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(30.0),
@@ -39,50 +44,30 @@ class _JokePageState extends State<JokePage> {
               ),
               margin: EdgeInsets.symmetric(horizontal: 30.0, vertical: 30),
               padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 30.0),
+              //building list from future builder snapshot
               child: ListView.builder(
                 itemCount: snapshot.data.length,
                 itemBuilder: (BuildContext context, int index) {
                   var document = snapshot.data[index];
+                  //show list of joke in tile
                   return ListTile(
                     title: Text(document.setup),
                     onTap: () {
+                      //show joke dialog
                       Get.defaultDialog(
                         title: document.type.toUpperCase(),
                         titleStyle: TextStyle(fontWeight: FontWeight.bold),
                         content: Column(
                           children: [
-                            Container(
-                              padding: EdgeInsets.only(top: 10.0),
-                              child: Column(
-                                children: [
-                                  Container(
-                                    padding: EdgeInsets.only(bottom: 10.0),
-                                    alignment: Alignment.centerLeft,
-                                    child: Text('Setup : ', style: TextStyle(fontWeight: FontWeight.bold)),
-                                  ),
-                                  Container(
-                                    child: Text(document.setup),
-                                  ),
-                                ],
-                              ),
+                            //this for setup field
+                            JokeField(
+                              textContent: document.setup,
+                              textHeadline: 'Setup : ',
                             ),
-                            Container(
-                              padding: EdgeInsets.only(top: 20.0),
-                              child: Column(
-                                children: [
-                                  Container(
-                                    padding: EdgeInsets.only(bottom: 10.0),
-                                    alignment: Alignment.centerLeft,
-                                    child: Text(
-                                      'Punchline : ',
-                                      style: TextStyle(fontWeight: FontWeight.bold),
-                                    ),
-                                  ),
-                                  Container(
-                                    child: Text(document.punchline),
-                                  ),
-                                ],
-                              ),
+                            //this for punchline field
+                            JokeField(
+                              textContent: document.punchline,
+                              textHeadline: 'Punchline : ',
                             ),
                           ],
                         ),
