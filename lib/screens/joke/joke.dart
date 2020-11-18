@@ -22,6 +22,27 @@ class _JokePageState extends State<JokePage> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                GestureDetector(
+                  onTap: () {
+                    setState(() {});
+                  },
+                  child: Container(
+                    padding: EdgeInsets.only(top: 40.0),
+                    width: double.infinity,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        Icon(Icons.refresh, size: 30.0),
+                        Container(
+                          child: Text(
+                            'Refresh',
+                            style: TextStyle(fontSize: 18.0),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
                 HeadlineContent(),
                 Expanded(
                   child: FutureBuilder(

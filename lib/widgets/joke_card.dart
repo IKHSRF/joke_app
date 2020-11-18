@@ -40,6 +40,14 @@ class JokeCard extends StatelessWidget {
         child: Container(
           decoration: BoxDecoration(
             color: Colors.white,
+            boxShadow: [
+              BoxShadow(
+                offset: Offset(0, 17),
+                blurRadius: 17,
+                spreadRadius: -13,
+                color: shadowColor,
+              ),
+            ],
           ),
           child: Column(
             children: [

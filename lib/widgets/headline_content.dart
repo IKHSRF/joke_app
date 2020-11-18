@@ -9,7 +9,7 @@ class HeadlineContent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.only(top: 80, bottom: 40.0),
+      padding: EdgeInsets.only(top: 10.0, bottom: 40.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
