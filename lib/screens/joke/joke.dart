@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:joke_app/Services/jokeAPI_services.dart';
-import 'package:joke_app/widgets/joke_dialog_content.dart';
+import 'package:joke_app/services/jokeAPI_services.dart';
+import 'package:joke_app/widgets/headline_background.dart';
+import 'package:joke_app/widgets/headline_content.dart';
+import 'package:joke_app/widgets/joke_card.dart';
 
 class JokePage extends StatefulWidget {
   @override
@@ -11,74 +12,48 @@ class JokePage extends StatefulWidget {
 class _JokePageState extends State<JokePage> {
   @override
   Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
     return Scaffold(
-      backgroundColor: Colors.blue,
-      appBar: AppBar(
-        title: Text('Aplikasi ini hanyalah bercandaan'),
-        actions: [
-          //button refresh, if button tapped, refresh the joke
-          IconButton(
-            icon: Icon(Icons.refresh_outlined),
-            onPressed: () {
-              setState(() {});
-            },
-          ),
-        ],
-      ),
-      body: Container(
-        //return snapshot from joke model
-        child: FutureBuilder(
-          future: JokeFunction.getRandomTenJoke(),
-          builder: (BuildContext context, AsyncSnapshot snapshot) {
-            //if snapshot do not have data, show circular progress indicator
-            if (!snapshot.hasData) {
-              return Center(
-                child: CircularProgressIndicator(),
-              );
-            }
-            //if snapshot have data, show list of joke
-            return Container(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(30.0),
-                color: Colors.white,
-              ),
-              margin: EdgeInsets.symmetric(horizontal: 30.0, vertical: 30),
-              padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 30.0),
-              //building list from future builder snapshot
-              child: ListView.builder(
-                itemCount: snapshot.data.length,
-                itemBuilder: (BuildContext context, int index) {
-                  var document = snapshot.data[index];
-                  //show list of joke in tile
-                  return ListTile(
-                    title: Text(document.setup),
-                    onTap: () {
-                      //show joke dialog
-                      Get.defaultDialog(
-                        title: document.type.toUpperCase(),
-                        titleStyle: TextStyle(fontWeight: FontWeight.bold),
-                        content: Column(
-                          children: [
-                            //this for setup field
-                            JokeField(
-                              textContent: document.setup,
-                              textHeadline: 'Setup : ',
-                            ),
-                            //this for punchline field
-                            JokeField(
-                              textContent: document.punchline,
-                              textHeadline: 'Punchline : ',
-                            ),
-                          ],
+      body: Stack(
+        children: [
+          HeadlineBackground(size: size),
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: 20.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                HeadlineContent(),
+                Expanded(
+                  child: FutureBuilder(
+                    future: JokeServices.getRandomTenJoke(),
+                    builder: (BuildContext context, AsyncSnapshot snapshot) {
+                      if (!snapshot.hasData) {
+                        return Center(
+                          child: CircularProgressIndicator(),
+                        );
+                      }
+                      return GridView.builder(
+                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 2,
+                          crossAxisSpacing: 20.0,
+                          mainAxisSpacing: 20.0,
+                          childAspectRatio: .85,
                         ),
+                        itemCount: snapshot.data.length,
+                        itemBuilder: (BuildContext context, int index) {
+                          return JokeCard(
+                            snapshot: snapshot,
+                            index: index,
+                          );
+                        },
                       );
                     },
-                  );
-                },
-              ),
-            );
-          },
-        ),
+                  ),
+                ),
+              ],
+            ),
+          )
+        ],
       ),
     );
   }

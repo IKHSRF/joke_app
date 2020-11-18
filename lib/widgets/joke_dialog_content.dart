@@ -13,7 +13,7 @@ class JokeField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.only(top: 20.0),
+      padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 20.0),
       child: Column(
         children: [
           //headline for joke field
@@ -24,6 +24,7 @@ class JokeField extends StatelessWidget {
           ),
           //content for joke field
           Container(
+            alignment: Alignment.centerLeft,
             child: Text(textContent),
           ),
         ],
